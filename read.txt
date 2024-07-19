@@ -1,0 +1,253 @@
+Инструкция по использованию проекта "Генератор PDF"
+
+Описание
+Этот проект представляет собой Windows Forms приложение на C#, которое позволяет пользователям вводить текст в текстовое поле и генерировать PDF-файл с этим текстом по нажатию кнопки.
+
+Структура проекта
+
+Проект состоит из двух основных файлов:
+1. Program.cs - содержит точку входа в приложение.
+2. Form1.Designer.cs - содержит дизайн и разметку главной формы приложения.
+
+Инструкция по установке и запуску
+
+Требования
+1. Visual Studio (или другой IDE, поддерживающий C#)
+2. .NET Framework
+
+Шаги
+
+1. Скачайте и установите Visual Studio (если ещё не установлено).
+2. Создайте новый проект Windows Forms в Visual Studio.
+3. Замените содержимое файлов Program.cs, Form1.cs, Form1.Designer.cs содержимым, приведённым ниже.
+4. Запустите проект.
+
+Файлы проекта
+
+Program.cs
+Этот файл содержит точку входа в приложение и инициализирует главную форму (Form1).
+
+using System;
+using System.Windows.Forms;
+
+namespace pdf
+{
+    static class Program
+    {
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Form1());
+        }
+    }
+}
+
+Описание
+- Namespace: pdf
+- Класс: Program
+- Метод Main:
+- Application.EnableVisualStyles(): Включает визуальные стили для приложения.
+- Application.SetCompatibleTextRenderingDefault(false): Устанавливает совместимый механизм отрисовки текста.
+- Application.Run(new Form1()): Запускает приложение и открывает главную форму Form1.
+
+Form1.Designer.cs
+Этот файл содержит дизайн и разметку главной формы (Form1). Он определяет компоненты и их свойства, такие как метки, текстовые поля и кнопки.
+
+namespace pdf
+{
+    partial class Form1
+    {
+        /// <summary>
+        /// Обязательная переменная конструктора.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Очистить все используемые ресурсы.
+        /// </summary>
+        /// <param name="disposing">истинно, если управляемый ресурс должен быть удален; иначе ложно.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Код, автоматически созданный конструктором форм Windows
+
+        /// <summary>
+        /// Требуемый метод для поддержки конструктора — не изменяйте 
+        /// его содержимое в редакторе кода.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            label1 = new Label();
+            textBox1 = new TextBox();
+            generateButton = new Button();
+            SuspendLayout();
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(13, 13);
+            label1.Name = "label1";
+            label1.Size = new Size(62, 15);
+            label1.TabIndex = 0;
+            label1.Text = "Ваш текст";
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(13, 31);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(475, 102);
+            textBox1.TabIndex = 1;
+            // 
+            // generateButton
+            // 
+            generateButton.Location = new Point(124, 139);
+            generateButton.Name = "generateButton";
+            generateButton.Size = new Size(259, 23);
+            generateButton.TabIndex = 2;
+            generateButton.Text = "Сгенерировать PDF";
+            generateButton.UseVisualStyleBackColor = true;
+            generateButton.Click += generateButton_Click;
+            generateButton.BackColor = Color.FromArgb(46, 204, 113); 
+            generateButton.ForeColor = Color.White;
+            string text = textBox1.Text;
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(500, 210);
+            Controls.Add(generateButton);
+            Controls.Add(textBox1);
+            Controls.Add(label1);
+            Name = "Form1";
+            Text = "Генератор отчетов в формате PDF";
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button generateButton;
+    }
+}
+
+Описание
+- Namespace: pdf
+- Класс: Form1
+
+Методы и компоненты:
+- Dispose(bool disposing): Очищает ресурсы, используемые формой.
+- InitializeComponent(): Инициализирует компоненты формы.
+
+Компоненты формы
+- Label: Отображает текст "Ваш текст".
+- Свойства: AutoSize, Location, Name, Size, TabIndex, Text.
+- TextBox: Многострочное текстовое поле для ввода текста.
+- Свойства: Location, Multiline, Name, Size, TabIndex.
+- Button: Кнопка для генерации PDF.
+ Свойства: Location, Name, Size, TabIndex, Text, UseVisualStyleBackColor, BackColor, ForeColor.
+- Событие: Click.
+
+Добавление функционала генерации PDF
+Для добавления функционала генерации PDF, вам потребуется дополнительная библиотека, такая как iTextSharp. Ниже приведён пример кода для обработки нажатия кнопки и генерации PDF-файла:
+
+Шаги
+1. Добавьте ссылку на библиотеку iTextSharp в ваш проект. Это можно сделать через NuGet Package Manager в Visual Studio.
+2. Скопируйте код, приведенный ниже.
+
+Form1.cs
+
+using System;
+using System.Text;
+using System.Windows.Forms;
+using PdfSharp.Drawing;
+using PdfSharp.Drawing.Layout;
+using PdfSharp.Pdf;
+
+namespace pdf
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+            this.BackColor = Color.LightBlue;
+        }
+
+        private void generateButton_Click(object sender, EventArgs e)
+        {
+            string text = textBox1.Text;
+            GeneratePdf(text);
+        }
+
+        private void GeneratePdf(string text)
+        {
+            // Создание документа PDF
+            PdfDocument document = new PdfDocument();
+            document.Info.Title = "Отчет";
+            PdfPage page = document.AddPage();
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+            XFont font = new XFont("Arial", 12);
+
+            // Установка начальной позиции для текста
+            XRect rect = new XRect(50, 50, page.Width - 100, page.Height - 100);
+
+            // Разбивка текста на слова
+            string[] words = text.Split(new[] { ' ', '\t', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Текущая позиция Y на странице
+            double curYPos = rect.Y;
+
+            StringBuilder currentLine = new StringBuilder();
+
+            // Цикл для отрисовки каждого слова текста
+            foreach (string word in words)
+            {
+                string testLine = currentLine.ToString() + word + " ";
+                XSize size = gfx.MeasureString(testLine, font);
+
+                if (size.Width < rect.Width)
+                {
+                    currentLine.Append(word).Append(" ");
+                }
+                else
+                {
+                    gfx.DrawString(currentLine.ToString(), font, XBrushes.Black, new XPoint(rect.X, curYPos));
+                    curYPos += size.Height;
+                    currentLine = new StringBuilder(word + " ");
+                }
+
+                if (curYPos + size.Height > page.Height - 100)
+                {
+                    page = document.AddPage();
+                    gfx = XGraphics.FromPdfPage(page);
+                    curYPos = 50;
+                    currentLine = new StringBuilder();
+                }
+            }
+
+            //  выполняет отрисовку текста, содержащегося в переменной currentLine, с использованием заданных параметров шрифта, цвета и позиции на странице
+            gfx.DrawString(currentLine.ToString(), font, XBrushes.Black, new XPoint(rect.X, curYPos));
+
+            // Сохранить документ
+            string filename = "Report.pdf";
+            document.Save(filename);
+            MessageBox.Show($"PDF файл '{filename}' успешно создан!");
+        }
+
+
+    }
+}
+
+Заключение
+Этот проект демонстрирует основы создания Windows Forms приложений на C# и взаимодействия с пользователем через графический интерфейс. Следуя данной инструкции, вы сможете установить и запустить проект, а также добавить функционал для генерации PDF-файлов.
